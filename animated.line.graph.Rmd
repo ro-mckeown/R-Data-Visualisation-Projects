@@ -1,0 +1,68 @@
+---
+title: "Animated Line Graph"
+author: "Ronan McKeown"
+date: "2023-12-19"
+output: html_document
+---
+
+```{r}
+##proviidng a mirror to install package
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("timetk")
+install.packages("zoo")
+install.packages("datasets")
+install.packages("gganimate")
+install.packages("tidyverse")
+install.packages("gifski")
+
+
+library(ggplot2)
+library(dplyr)
+library(timetk)
+library(zoo)
+library(datasets)
+library(gganimate)
+library(tidyverse)
+library(gifski)
+
+```
+
+# Setting up the dataframe
+
+```{r}
+df <- AirPassengers
+# Converting time series data into a df using the timetk data package
+df <- tk_tbl(df)
+df
+# Forming an as.Date variable to plot time series data  
+#creating a new variable called "Date"  
+#Using the Zoo package, as that is where the yearmon column is coming from
+df <- transform(df, date = zoo:: as.Date(index, frac = 0))
+
+df <- as_tibble(df)
+df
+```
+
+#plotting the data in an xy axis
+```{r}
+p <- df %>%
+  ggplot(aes(x = date, y = value)) +
+  geom_line() +
+  labs(x = "Date",
+       y = "Number of Air Passengers",
+       title = "Number of Air Passengers") +
+  scale_x_date(date_labels = "%Y", date_breaks = "1 year") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 15)) +
+  #Annotating the line graph
+  transition_reveal(date)
+  
+
+#NB the data frame has 144 observations
+animate(p, nframes = 144, fps = 20)
+
+```
+

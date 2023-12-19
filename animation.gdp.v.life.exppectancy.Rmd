@@ -1,0 +1,51 @@
+---
+title: "animation.gdp.v.life.exppectancy"
+author: "Ronan McKeown"
+date: "2023-12-19"
+output: html_document
+---
+
+```{r}
+##proviidng a mirror to install package
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("gapminder")
+install.packages("gganimate")
+install.packages("tidyverse")
+install.packages("gifski")
+
+
+library(ggplot2)
+library(dplyr)
+library(gapminder)
+library(gganimate)
+library(tidyverse)
+library(gifski)
+```
+
+
+```{r}
+print(gapminder)
+colnames(gapminder)
+head(gapminder)
+```
+
+```{r}
+gapplot <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, size = pop, color = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(title = "Year: {frame_time}",
+       x = "GDP per Capita", 
+       y = "Life Expectancy (years)") +
+  transition_time(year) +
+  ease_aes('linear')
+
+gapplot
+anim_save("gapmind.gif",gapplot)
+```
+
+

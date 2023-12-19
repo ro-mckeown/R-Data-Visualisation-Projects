@@ -26,7 +26,7 @@ Read CSV data File and clean data
 
 ```{r}
 # Instead of using setwd(), specify the full path directly
-input_path <- "C:/Users/romck/Downloads/GLB.Ts+dSST.csv"
+input_path <- "C:/Users/name/folder/file.name.csv
 
 # Read data using the specified path
 t_diff <- read.csv(input_path, skip = 1, na = "***") %>%
